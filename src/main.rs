@@ -1,24 +1,35 @@
 use clap::Parser;
 use dotenv::dotenv;
+use std::thread;
 
-mod command;
+use clokwerk::{AsyncScheduler, TimeUnits};
+use std::time::Duration;
+
+mod block_number;
+mod bor;
+mod disk;
+mod notification;
 mod request;
 mod utils;
 
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct Args {
-    /// Show hello message
+    /// Delete log after 3 hours
     #[clap(long)]
-    hello: bool,
+    clean: bool,
 
-    /// Show env
-    #[clap(short, long, default_value = "USER")]
-    env: String,
-
-    /// Send get request
+    /// Check if bor is fully synced
     #[clap(long)]
-    request: bool,
+    bor: bool,
+
+    /// Check if disk is full
+    #[clap(long)]
+    disk: bool,
+
+    /// Send a message to telegram channel
+    #[clap(long)]
+    msg: Option<String>,
 }
 
 #[tokio::main]
@@ -27,19 +38,40 @@ async fn main() {
 
     let args = Args::parse();
 
-    if args.hello {
-        println!("Hello, world!");
+    if args.clean {
+        disk::delete_log();
+        println!("log deleted");
     }
 
-    let key = args.env;
-    let val = utils::get_env(&key);
-    println!("{} = {}", key, val);
+    if args.disk {
+        let mut scheduler = AsyncScheduler::new();
+        scheduler.every(1.hours()).run(|| async {
+            let available_disk = disk::available_disk().unwrap();
+            let available_disk_gb = utils::round_float(utils::byte_to_gb(available_disk), 2);
+            println!("available disk space: {} GB", available_disk_gb);
+            if available_disk < 10_000_000_000 {
+                let msg = format!(
+                    "Available disk space is less than 10GB. Available disk space: {available_disk_gb} GB",
+                );
 
-    command::hello_world();
+                disk::delete_log();
+                println!("log deleted");
 
-    if args.request {
-        let url = "https://google.com";
-        let res = request::send_get_request(url).await;
-        assert!(res.is_ok());
+                notification::send_notification(&msg).await;
+            }
+        });
+
+        loop {
+            scheduler.run_pending().await;
+            thread::sleep(Duration::from_millis(10));
+        }
+    }
+
+    if args.bor {
+        bor::check_if_bor_synced().await;
+    }
+
+    if args.msg != None {
+        notification::send_notification(&args.msg.unwrap()).await;
     }
 }

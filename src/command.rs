@@ -1,13 +1,21 @@
-use std::process::{Command, Stdio};
+use std::process::Command;
 
-pub fn hello_world() {
-    let output = Command::new("sh")
-        .arg("-c")
-        .arg("echo Hello, world!")
-        .stdout(Stdio::piped())
+pub fn start_bor() {
+    println!("start_bor");
+    Command::new("sudo")
+        .arg("service")
+        .arg("heimdalld")
+        .arg("start")
         .output()
         .expect("failed to execute process");
+}
 
-    let hello = String::from_utf8(output.stdout).unwrap();
-    println!("{:?}", hello);
+pub fn stop_bor() {
+    println!("stop_bor");
+    Command::new("sudo")
+        .arg("service")
+        .arg("heimdalld")
+        .arg("stop")
+        .output()
+        .expect("failed to execute process");
 }
