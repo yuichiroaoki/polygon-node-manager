@@ -22,8 +22,7 @@ fn test_available_disk() {
     assert_eq!(available_disk().unwrap() > 0, true);
 }
 
-pub fn delete_log() {
-    println!("delete log");
+pub fn delete_logs() {
     Command::new("sudo")
         .arg("journalctl")
         .arg("--vacuum-time")

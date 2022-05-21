@@ -15,7 +15,7 @@ mod utils;
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct Args {
-    /// Delete log after 3 hours
+    /// Delete logs
     #[clap(long)]
     clean: bool,
 
@@ -27,7 +27,7 @@ struct Args {
     #[clap(long)]
     disk: bool,
 
-    /// Send a message to telegram channel
+    /// Send a message with telegram
     #[clap(long)]
     msg: Option<String>,
 }
@@ -39,8 +39,7 @@ async fn main() {
     let args = Args::parse();
 
     if args.clean {
-        disk::delete_log();
-        println!("log deleted");
+        disk::delete_logs();
     }
 
     if args.disk {
@@ -54,9 +53,7 @@ async fn main() {
                     "Available disk space is less than 10GB. Available disk space: {available_disk_gb} GB",
                 );
 
-                disk::delete_log();
-                println!("log deleted");
-
+                disk::delete_logs();
                 notification::send_notification(&msg).await;
             }
         });
