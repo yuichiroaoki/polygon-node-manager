@@ -52,6 +52,7 @@ jobs:
           command: test
         env: 
           JSON_RPC_URL: ${{ secrets.JSON_RPC_URL }}
+          EXPRESS_SERVER_URL: ${{ secrets.EXPRESS_SERVER_URL }}
 
   lints:
     name: Lints
