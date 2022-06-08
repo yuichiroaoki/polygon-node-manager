@@ -6,9 +6,16 @@ pub async fn check_if_bor_synced() {
     loop {
         let five_mins = time::Duration::from_secs(300);
         let block_synced = check_block_diff(10).await;
-        if block_synced {
-            send_notification("Block states on bor is synced.").await;
-            break;
+
+        match block_synced {
+            Ok(true) => {
+                send_notification("Block states on bor is synced.").await;
+                break;
+            }
+            Ok(false) => (),
+            Err(e) => {
+                println!("Failed to check bor status, ({:?})", e);
+            }
         }
         thread::sleep(five_mins);
     }

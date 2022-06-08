@@ -18,12 +18,12 @@ async fn get_local_block_number() -> u64 {
     local_block_number
 }
 
-pub async fn check_block_diff(max_diff: i64) -> bool {
+pub async fn check_block_diff(max_diff: i64) -> Result<bool, reqwest::Error> {
     let current_block_number = get_block_number().await;
     let local_block_number = get_local_block_number().await;
     let diff: i64 = (current_block_number - local_block_number) as i64;
     println!("diff: {}", diff);
     // assert!(diff > max_diff, "diff is too large");
     // Ok(())
-    max_diff > diff
+    Ok(max_diff > diff)
 }
