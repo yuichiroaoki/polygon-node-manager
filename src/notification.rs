@@ -1,5 +1,6 @@
 use crate::request;
 use crate::utils::get_env;
+use log::{error, info};
 
 pub async fn send_notification(text: &str) {
     let url = format!(
@@ -10,5 +11,10 @@ pub async fn send_notification(text: &str) {
     );
 
     let res = request::send_get_request(&url).await;
-    println!("res: {}", res.unwrap());
+    match res {
+        Ok(_) => info!("Notification sent."),
+        Err(e) => {
+            error!("Failed to send notification, ({:?})", e);
+        }
+    }
 }

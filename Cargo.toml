@@ -16,3 +16,5 @@ tokio = { version =  "1.8", features = ["rt-multi-thread", "macros"] }
 sysinfo = "0.23.11"
 serde = {version = "1.0.137", features = ["derive"]}
 clokwerk = "0.4.0-rc1"
+log = "0.4.0"
+env_logger = "0.8.4"

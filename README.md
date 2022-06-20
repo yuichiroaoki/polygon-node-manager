@@ -17,20 +17,20 @@ EXPRESS_SERVER_URL=<bot-util-api-url>
 
 ## Check disk space
 ```bash
-cargo run -- --disk
+env RUST_LOG=info cargo run -- --disk
 ```
 
 ## Delete logs
 ```bash
-cargo run -- --clean
+env RUST_LOG=info cargo run -- --clean
 ```
 
 ## Check if bor is fully synced
 ```bash
-cargo run -- --bor
+env RUST_LOG=info cargo run -- --bor
 ```
 
 ## Send a message with telegram
 ```bash
-cargo run -- --msg "message"
+env RUST_LOG=info cargo run -- --msg "message"
 ```
