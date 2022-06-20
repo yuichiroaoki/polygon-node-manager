@@ -1,5 +1,6 @@
 use crate::block_number::check_block_diff;
 use crate::notification::send_notification;
+use log::error;
 use std::{thread, time};
 
 pub async fn check_if_bor_synced() {
@@ -14,7 +15,7 @@ pub async fn check_if_bor_synced() {
             }
             Ok(false) => (),
             Err(e) => {
-                println!("Failed to check bor status, ({:?})", e);
+                error!("Failed to check bor status, ({:?})", e);
             }
         }
         thread::sleep(five_mins);

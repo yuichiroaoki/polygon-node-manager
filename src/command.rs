@@ -1,7 +1,7 @@
 use std::process::Command;
 
 pub fn start_bor() {
-    println!("start_bor");
+    info!("start_bor");
     Command::new("sudo")
         .arg("service")
         .arg("heimdalld")
@@ -11,7 +11,7 @@ pub fn start_bor() {
 }
 
 pub fn stop_bor() {
-    println!("stop_bor");
+    info!("stop_bor");
     Command::new("sudo")
         .arg("service")
         .arg("heimdalld")

@@ -1,5 +1,6 @@
 use clap::Parser;
 use dotenv::dotenv;
+use log::info;
 use std::thread;
 
 use clokwerk::{AsyncScheduler, TimeUnits};
@@ -36,6 +37,9 @@ struct Args {
 async fn main() {
     dotenv().ok();
 
+    env_logger::init();
+    info!("starting up");
+
     let args = Args::parse();
 
     if args.clean {
@@ -47,7 +51,7 @@ async fn main() {
         scheduler.every(1.hours()).run(|| async {
             let available_disk = disk::available_disk().unwrap();
             let available_disk_gb = utils::round_float(utils::byte_to_gb(available_disk), 2);
-            println!("available disk space: {} GB", available_disk_gb);
+            info!("available disk space: {} GB", available_disk_gb);
             if available_disk < 10_000_000_000 {
                 let msg = format!(
                     "Available disk space is less than 10GB. Available disk space: {available_disk_gb} GB",
