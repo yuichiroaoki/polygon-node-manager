@@ -1,6 +1,6 @@
 use crate::request;
 use crate::utils::get_env;
-use log::{error,info};
+use log::{error, info};
 
 pub async fn send_notification(text: &str) {
     let url = format!(
