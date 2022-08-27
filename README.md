@@ -11,8 +11,8 @@ sudo apt install pkg-config libssl-dev
 ```
 API_KEY=<telegram-bot-api-key>
 CHAT_ID=<telegram-bot-chat-id>
-JSON_RPC_URL=<polygon-mainnet-json-rpc-url>
-EXPRESS_SERVER_URL=<bot-util-api-url>
+JSON_RPC_URL=<json-rpc-url-for-your-node> (e.g. http://localhost:8545)
+ALCHEMY_JSON_RPC_URL=<polygon-mainnet-json-rpc-url>
 ```
 
 ## Check disk space
