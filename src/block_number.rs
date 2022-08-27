@@ -1,8 +1,8 @@
-use std::convert::TryFrom;
+use crate::utils::get_env;
 use ethers::prelude::*;
 use ethers::providers::{Http, Provider};
-use crate::utils::get_env;
 use log::info;
+use std::convert::TryFrom;
 
 async fn get_block_number() -> Result<u64, Box<dyn std::error::Error>> {
     let provider = Provider::<Http>::try_from(get_env("ALCHEMY_JSON_RPC_URL"))
@@ -29,7 +29,6 @@ pub async fn check_block_diff(max_diff: i64) -> Result<bool, Box<dyn std::error:
     // Ok(())
     Ok(max_diff > diff)
 }
-
 
 #[cfg(test)]
 mod test {
